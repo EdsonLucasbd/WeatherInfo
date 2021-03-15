@@ -3,27 +3,27 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 
-const Conditions = () => {
+const Conditions = ({weather}) => {
   return (
     <View style={styles.container}>
       <View style={styles.condition}>
         <Feather name='wind' size={23} color='#1ed6ff' />
-        <Text>7 Km/h</Text>
+        <Text>{weather.results.wind_speedy}</Text>
       </View>
 
       <View style={styles.condition}>
         <MaterialCommunityIcons name='weather-sunset-up' size={23} color='#1ed6ff' />
-        <Text>6:00 am</Text>
+        <Text>{weather.results.sunrise}</Text>
       </View>
 
       <View style={styles.condition}>
         <MaterialCommunityIcons name='weather-sunset-down' size={23} color='#1ed6ff' />
-        <Text>17:50 am</Text>
+        <Text>{weather.results.sunset}</Text>
       </View>
 
       <View style={styles.condition}>
         <Feather name='droplet' size={23} color='#1ed6ff' />
-        <Text>65</Text>
+        <Text>{weather.results.humidity}</Text>
       </View>
 
     </View>
