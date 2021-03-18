@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Text, StyleSheet, FlatList, View } from 'react-native';
 import * as Location from 'expo-location';
+import LottieView from 'lottie-react-native';
 
 import Conditions from '../../components/Conditions';
 import Forecast from '../../components/Forecast';
@@ -8,6 +9,8 @@ import Header from '../../components/Header';
 import Menu from '../../components/Menu';
 
 import api, { key } from '../../services/api';
+
+import weatherAnimation from '../../../assets/weather-animation.json';
 
 const Home = () => {
   const [errorMsg, setErrorMsg] = useState(null);
@@ -31,7 +34,6 @@ const Home = () => {
 
       const response = await api.get(`/weather?key=${key}&lat=${location.coords.latitude}&lon=${location.coords.longitude}`);
       setWeather(response.data);
-      console.log(response.data);
 
       if(response.data.results.currently === 'noite'){
         setBackground(['#0c3741','#0f2f61']);
@@ -42,10 +44,10 @@ const Home = () => {
           setIcon({ name: 'sunny', color: '#ffb300' });
           break;
         case 'rain':
-          setIcon({ name: 'rainy', color: '#1ec9ff' });
+          setIcon({ name: 'rainy', color: '#fff' });
           break;
         case 'storm':
-          setIcon({ name: 'thunderstorm', color: '#686767' });
+          setIcon({ name: 'thunderstorm', color: '#fff' });
           break;
       }
 
@@ -58,6 +60,13 @@ const Home = () => {
     return(
       <View style={styles.container}>
         <Text style={{ fontSize: 17, fontStyle: 'italic'}}>Carregando dados...</Text>
+        {/* <LottieView 
+          source={weatherAnimation}
+          autoPlay
+          loop
+          autoSize
+          resizeMode='contain'
+        /> */}
       </View>
     )
   }

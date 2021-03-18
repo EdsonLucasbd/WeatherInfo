@@ -3,7 +3,7 @@ export const customCondition = (condition) => {
     case 'storm':
       return icon = {
         name: 'thunderstorm-outline',
-        color: '#686767'
+        color: '#1ec9ff'
       };
       break;
     case 'clear_day':

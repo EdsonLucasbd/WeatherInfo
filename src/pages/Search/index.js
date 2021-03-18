@@ -4,27 +4,26 @@ import {
   Text, 
   StyleSheet, 
   SafeAreaView, 
-  TouchableOpacity, 
-  TextInput, 
-  Keyboard } from 'react-native';
-
-import { Feather } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+  Keyboard, 
+  FlatList,
+  TouchableOpacity} from 'react-native';
 
 import api, { key } from '../../services/api';
 import { LinearGradient } from 'expo-linear-gradient';
 import Conditions from '../../components/Conditions';
+import BackButton from '../../components/BackButton';
+import SearchBox from '../../components/SearchBox';
+import Forecast from '../../components/Forecast';
 
 const Search = () => {
-  const navigation = useNavigation();
   const [input, setInput] = useState('');
   const [city, setCity] = useState(null);
   const [error, setError] = useState(null);
+  const [isCityClick, setIsCityClick] = useState(false);
 
   async function handleSearch(){
-    //https://api.hgbrasil.com/weather?key=9f718023&city_name=Campinas,SP
     const response = await api.get(`weather?key=${key}&city_name=${input}`);
-    console.log(response);
+
     if(response.data.by === 'default'){
       setError('Hum... Não achei sua cidade.');
       setInput('');
@@ -39,51 +38,45 @@ const Search = () => {
 
   }
 
+  function handleChangeText(text){
+    setInput(text);
+  }
+
   if(city){
     return(
       <SafeAreaView style={styles.container}>
-        <TouchableOpacity 
-          style={styles.backButton} 
-          onPress={() => navigation.navigate('Home')}
-        >
-          <Feather
-            name='chevron-left'
-            size={32}
-            color='#000'
-          />
-          <Text style={{ fontSize: 22 }}>Voltar</Text>
+        <BackButton />
+
+        <SearchBox changeText={handleChangeText} input={input} search={handleSearch}/>
+
+        <TouchableOpacity onPress={() => setIsCityClick(true)}>
+          <LinearGradient
+            style={styles.header}
+            colors={['#1ed6ff', '#97c1ff']}
+          >
+          
+          <Text style={styles.date}>{city.results.date}</Text>
+          <Text style={styles.city}>{city.results.city}</Text>
+          <View>
+            <Text style={styles.temp}>{city.results.temp}°</Text>
+          </View>
+
+          <Conditions weather={city}/>
+
+          </LinearGradient>
         </TouchableOpacity>
 
-        <View style={styles.searchBox}>
-          <TextInput
-            value={input}
-            onChangeText={(valor) => setInput(valor)}
-            placeholder='Ex: Salvador, BA'
-            style={styles.input}
-          />
-          <TouchableOpacity style={styles.icon} onPress={handleSearch}>
-            <Feather
-              name='search'
-              size={22}
-              color='#fff'
-            />
-          </TouchableOpacity>
-        </View>
-
-        <LinearGradient
-          style={styles.header}
-          colors={['#1ed6ff', '#97c1ff']}
-        >
-        
-        <Text style={styles.date}>{city.results.date}</Text>
-        <Text style={styles.city}>{city.results.city}</Text>
-        <View>
-          <Text style={styles.temp}>{city.results.temp}°</Text>
-        </View>
-
-        <Conditions weather={city}/>
-
-        </LinearGradient>
+      {isCityClick && (
+        <FlatList
+        showsHorizontalScrollIndicator={false}
+        horizontal={true}
+        contentContainerStyle={{ paddingBottom: '5%' }}
+        style={styles.list}
+        data={city.results.forecast}
+        keyExtractor={ item => item.date }
+        renderItem={ ({item}) => <Forecast data={item}/> }
+      />
+      )}
 
       </SafeAreaView>
     )
@@ -91,33 +84,9 @@ const Search = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity 
-        style={styles.backButton} 
-        onPress={() => navigation.navigate('Home')}
-      >
-        <Feather
-          name='chevron-left'
-          size={32}
-          color='#000'
-        />
-        <Text style={{ fontSize: 22 }}>Voltar</Text>
-      </TouchableOpacity>
+      <BackButton />
 
-      <View style={styles.searchBox}>
-        <TextInput
-          value={input}
-          onChangeText={(valor) => setInput(valor)}
-          placeholder='Ex: Salvador, BA'
-          style={styles.input}
-        />
-        <TouchableOpacity style={styles.icon} onPress={handleSearch}>
-          <Feather
-            name='search'
-            size={22}
-            color='#fff'
-          />
-        </TouchableOpacity>
-      </View>
+      <SearchBox changeText={handleChangeText} input={input} search={handleSearch}/>
 
       { error && <Text style={{marginTop: 25, fontSize: 18}}>{error}</Text> }
 
@@ -131,38 +100,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: '10%',
     backgroundColor: '#e8f0ff'
-  },
-  backButton:{
-    flexDirection: 'row',
-    marginLeft: 15,
-    alignSelf: 'flex-start',
-    alignItems: 'center',
-    marginBottom: 10
-  },
-  searchBox:{
-    alignItems: 'center',
-    flexDirection: 'row',
-    backgroundColor: '#ddd',
-    width: '90%',
-    height: 50,
-    borderRadius: 8
-  },
-  input:{
-    width: '85%',
-    height: 50,
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 8,
-    borderBottomLeftRadius: 8,
-    padding: 7
-  },
-  icon:{
-    width: '15%',
-    backgroundColor: '#1ed6ff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 50,
-    borderTopRightRadius: 8,
-    borderBottomRightRadius: 8
   },
   header:{
     marginTop: '5%',
@@ -186,6 +123,10 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 90,
     fontWeight: 'bold'
+  },
+  list:{
+    marginTop: 10,
+    marginLeft: 10,
   }
 });
 
