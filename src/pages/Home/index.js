@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, Text, StyleSheet, FlatList, View } from 'react-native';
+import { 
+  SafeAreaView, 
+  ActivityIndicator, 
+  StyleSheet, 
+  FlatList, 
+  View, 
+  Alert, 
+  Text } from 'react-native';
 import * as Location from 'expo-location';
-import LottieView from 'lottie-react-native';
+import * as Network from 'expo-network';
 
 import Conditions from '../../components/Conditions';
 import Forecast from '../../components/Forecast';
@@ -10,10 +17,7 @@ import Menu from '../../components/Menu';
 
 import api, { key } from '../../services/api';
 
-import weatherAnimation from '../../../assets/weather-animation.json';
-
 const Home = () => {
-  const [errorMsg, setErrorMsg] = useState(null);
   const [loading, setLoading] = useState(true);
   const [weather, setWeather] = useState([]);
   const [icon, setIcon] = useState({ name: 'cloud', color: '#fff' });
@@ -23,9 +27,15 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
+      let connection = await Network.getNetworkStateAsync();
+
+      if (connection.isConnected !== true || connection.isInternetReachable !== true){
+        Alert.alert('Que pena...', 'Você não tem acesso à internet para usar o app.');
+        return;
+      }
       
       if (status !== 'granted'){
-        setErrorMsg('Permissão negada para acessar a localização');
+        Alert.alert('Ops!', 'Precisamos de sua permissão para obeter a localização');
         setLoading(false);
         return;
       }
@@ -58,15 +68,9 @@ const Home = () => {
 
   if(loading){
     return(
-      <View style={styles.container}>
-        <Text style={{ fontSize: 17, fontStyle: 'italic'}}>Carregando dados...</Text>
-        {/* <LottieView 
-          source={weatherAnimation}
-          autoPlay
-          loop
-          autoSize
-          resizeMode='contain'
-        /> */}
+      <View style={styles.loadingContainer}>
+        <Text style={{ fontSize: 25, fontStyle: 'italic', color: '#fff'}}>Carregando dados...</Text>
+        <ActivityIndicator size='large' color='#0f2f61' />
       </View>
     )
   }
@@ -101,10 +105,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#e8f0ff',
     paddingTop: '5%',
   },
+  loadingContainer:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#1ed6ff',
+    paddingTop: '5%',
+  },
   list:{
     marginTop: 10,
     marginLeft: 10,
-  }
+  },
 });
 
 export default Home;
