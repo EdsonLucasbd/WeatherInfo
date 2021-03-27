@@ -25,11 +25,10 @@ Drawer menu                |  Searche Page
 <img width="250" src="https://github.com/EdsonLucasbd/WeatherInfo/blob/main/.github/menu.png" alt="drawer menu"/>  |  <img width="250" src="https://github.com/EdsonLucasbd/WeatherInfo/blob/main/.github/search.png" alt="drawer menu"/>
 
   
-<h2>A ser implementado</h2>
+<h2>Adições ao projeto inicial</h2>
 
-- [x] <s>Modal com informações meteorológicas da cidade pesquisada</s>
-- [x] Analisar conexão de internet
-- [x] <s>Componentizar search page</s>
+- Modal com informações meteorológicas da cidade pesquisada.
+- Verificação de conexão com a internet.
 
 <h2>🛠️ Como instalar</h2>
 <p>Antes de tudo, certifique-se que tem um ambiente configurado para rodar aplicações React Native, caso não saiba como fazer isso, o pessoal da Rocketseat fez um passo a passo bem detalhado que você pode conferir <a href="https://react-native.rocketseat.dev/">aqui</a>.</p>
