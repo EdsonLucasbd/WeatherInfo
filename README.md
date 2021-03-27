@@ -8,11 +8,9 @@
 
 <h2>💎 Tecnologias</h2>
 <p>Foram usadas as seguintes tecnologias:</p>
-<ul>
-  <li>React Native</li>
-  <li>Expo</li>
-  <li>HG Brasil API</li>
-</ul>
+- React Native
+- Expo
+- HG Brasil API
 
 <h2>🎨 Layout</h2>
 
