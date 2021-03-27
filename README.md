@@ -28,7 +28,7 @@ Drawer menu                |  Searche Page
 <h2>A ser implementado</h2>
 
 - [x] <s>Modal com informações meteorológicas da cidade pesquisada</s>
-- [ ] Analisar conexão de internet
+- [x] Analisar conexão de internet
 - [x] <s>Componentizar search page</s>
 
 <h2>🛠️ Como instalar</h2>
